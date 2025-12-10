@@ -2,6 +2,7 @@ const express = require('express');
 // Load environment variables from .env file
 const helmet = require('helmet');
 require('dotenv').config();
+const { notFound, errorHandler } = require('./src/middleware/errorMiddleware');
 const connectDB = require('./src/config/db');
 const noteRoutes = require('./src/routes/noteRoutes');
 
@@ -26,7 +27,11 @@ app.get('/', (req, res) => {
 // Note routes
 app.use('/api/notes', noteRoutes);
 
+// Error handling middleware
+app.use(notFound);
+app.use(errorHandler);
+
 // Start the server
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log(`Server is running smoothly🚀! http://localhost:${process.env.PORT || 8080}`);
 });
