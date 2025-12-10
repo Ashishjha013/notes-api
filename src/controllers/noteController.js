@@ -104,7 +104,6 @@ exports.deleteNote = async (req, res) => {
 
     return res.status(200).json({
       message: 'Note deleted successfully',
-      note,
     });
   } catch (err) {
     return res.status(500).json({

@@ -1,12 +1,12 @@
 const express = require('express');
-const mongoose = require('mpngoose');
+// Load environment variables from .env file
+const helmet = require('helmet');
+require('dotenv').config();
 const connectDB = require('./src/config/db');
+const noteRoutes = require('./src/routes/noteRoutes');
 
 // Initialize Express app
 const app = express();
-
-// Load environment variables from .env file
-require('dotenv').config();
 
 // Connect to the database
 connectDB();
@@ -15,10 +15,16 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Security middleware
+app.use(helmet());
+
 // Sample route
 app.get('/', (req, res) => {
   res.send('Welcome to Notes API 📝');
 });
+
+// Note routes
+app.use('/api/notes', noteRoutes);
 
 // Start the server
 app.listen(process.env.PORT, () => {
