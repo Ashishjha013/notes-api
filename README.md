@@ -35,6 +35,7 @@ error handling, and rate limiting.
 
 ## Folder Structure
 
+```
 project/
 app.js
 src/
@@ -49,6 +50,7 @@ noteRoutes.js
 middleware/
 errorMiddleware.js
 rateLimiter.js
+```
 
 ---
 
