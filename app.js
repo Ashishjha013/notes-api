@@ -5,6 +5,7 @@ require('dotenv').config();
 const { notFound, errorHandler } = require('./src/middleware/errorMiddleware');
 const connectDB = require('./src/config/db');
 const noteRoutes = require('./src/routes/noteRoutes');
+const limiter = require('./src/middleware/rateLimiter');
 
 // Initialize Express app
 const app = express();
@@ -18,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Security middleware
 app.use(helmet());
+// Rate limiting middleware
+app.use(limiter);
 
 // Sample route
 app.get('/', (req, res) => {

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Note = require('../models/noteModel');
 
-console.log('Query params:', req.query);
 
 // Create a new note
 exports.createNote = async (req, res) => {
