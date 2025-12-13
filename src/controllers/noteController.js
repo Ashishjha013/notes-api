@@ -1,4 +1,7 @@
+const mongoose = require('mongoose');
 const Note = require('../models/noteModel');
+
+console.log('Query params:', req.query);
 
 // Create a new note
 exports.createNote = async (req, res) => {
@@ -25,19 +28,48 @@ exports.createNote = async (req, res) => {
 };
 
 // Get all notes
-exports.getNotes = async (req, res) => {
+exports.getNotes = async (req, res, next) => {
   try {
-    const notes = await Note.find();
+    // 1) Read query params
+    const { page: pageQ, limit: limitQ, keyword, sort: sortQ } = req.query;
+    // 2) Defaults & parsing
+    const page = Math.max(parseInt(pageQ, 10) || 1, 1); // default 1
+    const limit = Math.max(parseInt(limitQ, 10) || 10, 1); // default 10
+    const skip = (page - 1) * limit;
 
+    // 3) Build search filter
+    let filter = {};
+    if (keyword && String(keyword).trim() !== '') {
+      const k = String(keyword).trim();
+      filter = {
+        $or: [{ title: { $regex: k, $options: 'i' } }, { content: { $regex: k, $options: 'i' } }],
+      };
+    }
+
+    // 4) Sorting
+    // Accepts ?sort=createdAt or ?sort=-createdAt or any valid field
+    const sort = sortQ || '-createdAt'; // default newest first
+
+    // 5) Count total docs
+    const total = await Note.countDocuments(filter);
+
+    // 6) Query DB with filter + sort + pagination
+    // .lean() -> returns plain JS objects (faster, lower memory)
+    // .select() optional: choose fields to return,
+    const notes = await Note.find(filter).sort(sort).skip(skip).limit(limit).lean();
+
+    // 7) Build response
     return res.status(200).json({
-      message: 'Notes retrieved successfully',
+      success: true,
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+      count: notes.length,
       notes,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: 'Failed to retrieve notes',
-      error: err.message,
-    });
+    next(err);
   }
 };
 
