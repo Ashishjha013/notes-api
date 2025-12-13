@@ -2,7 +2,7 @@
    
 # 📝 **Notes API**
 ### **Built a RESTful backend API using Node.js and Express.js with CRUD operations,**
-#### **pagination, search, sorting, centralized error handling, and rate limiting.**
+### **pagination, search, sorting, centralized error handling, and rate limiting.**
 
 ✨━━━━━━━━━━━━━━━━━━━ **❖** ━━━━━━━━━━━━━━━━━━━✨
 
