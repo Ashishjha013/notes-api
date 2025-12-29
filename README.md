@@ -82,9 +82,6 @@ GET /api/notes - Get all notes (pagination, search, sorting)
 GET /api/notes/:id - Get a note by ID  
 PUT /api/notes/:id - Update a note  
 DELETE /api/notes/:id - Delete a note
-
----
-
 ## Sample Query
 
 GET /api/notes?page=1&limit=10&keyword=task&sort=-createdAt
